@@ -540,7 +540,27 @@
       .hero-sub { margin: 0 auto 2rem; }
       .hero-btns { justify-content: center; }
       .hero-trust { justify-content: center; }
-      .hero-visual { display: none; }
+      .hero-visual {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  .photo-label {
+    position: absolute;
+    top: -7px;
+    left: -7px;
+    background: #ffffffdb;
+    padding: 10px 16px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+  .hero-photo-wrap {
+    width: 280px;
+    height: 360px;
+  }
       .about-grid { grid-template-columns: 1fr; }
       .about-photo { height: 300px; }
       .contact-grid { grid-template-columns: 1fr; }
