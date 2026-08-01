@@ -1196,68 +1196,261 @@
 
     /* ── VIDEOS ── */
     .videos {
-      padding: 80px 20px;
       background: var(--g100)
     }
 
-    .video-category {
-      margin-bottom: 60px;
+    /* section tabs */
+    .vid-tabs {
+      display: flex;
+      gap: .6rem;
+      flex-wrap: wrap;
+      margin: 2rem 0 1.5rem
     }
 
-    .category-head {
+    .vid-tab {
+      padding: .5rem 1.1rem;
+      border-radius: 100px;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px solid var(--g200);
+      background: #fff;
+      color: var(--g600);
+      transition: all .2s
+    }
+
+    .vid-tab.active,
+    .vid-tab:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--mint)
+    }
+
+    /* section title bar */
+    .vid-section {
+      margin-bottom: 3rem
+    }
+
+    .vid-section-head {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
+      gap: 12px;
+      margin-bottom: 1.4rem
     }
 
-    .category-head h3 {
-      font-size: 1.4rem;
+    .vid-section-head h3 {
+      font-family: var(--fh);
+      font-size: 1.05rem;
       font-weight: 700;
+      color: var(--dark)
     }
 
-    /* HORIZONTAL SCROLL */
-    .video-row {
-      display: flex;
-      gap: 18px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding-bottom: 10px;
+    .vid-section-badge {
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 100px;
+      letter-spacing: .04em;
+      text-transform: uppercase
     }
 
-    .video-row::-webkit-scrollbar {
-      height: 6px;
+    .badge-trending {
+      background: #fef3c7;
+      color: #92400e
     }
 
-    .video-row::-webkit-scrollbar-thumb {
-      background: #ccc;
-      border-radius: 20px;
+    .badge-postop {
+      background: var(--mint);
+      color: var(--teal-d)
     }
 
-    /* VIDEO CARD */
-    .video-card {
-      flex: 0 0 auto;
-      width: 280px;
-      border-radius: 20px;
+    .badge-viral {
+      background: #fce7f3;
+      color: #9d174d
+    }
+
+    .badge-conditions {
+      background: #ede9fe;
+      color: #5b21b6
+    }
+
+    .badge-stroke {
+      background: #fee2e2;
+      color: #991b1b
+    }
+
+    .badge-other {
+      background: var(--g100);
+      color: var(--g600)
+    }
+
+    .vid-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.4rem
+    }
+
+    .vid-card {
+      border-radius: 16px;
       overflow: hidden;
-      background: #111;
-      scroll-snap-align: start;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      background: var(--dark);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, .12);
+      transition: transform .3s, box-shadow .3s
     }
 
-    .video-card iframe {
+    .vid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, .2)
+    }
+
+    .vid-thumb {
+      position: relative;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      cursor: pointer;
+      background: linear-gradient(135deg, #0F766E, #0c4a6e)
+    }
+
+    .vid-thumb img {
       width: 100%;
-      height: 500px;
+      height: 100%;
+      object-fit: cover;
+      display: block
+    }
+
+    .vid-play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, .32);
+      transition: background .2s
+    }
+
+    .vid-thumb:hover .vid-play-overlay {
+      background: rgba(0, 0, 0, .15)
+    }
+
+    .vplay-btn {
+      width: 54px;
+      height: 54px;
+      background: rgba(255, 255, 255, .92);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .2s
+    }
+
+    .vid-thumb:hover .vplay-btn {
+      transform: scale(1.1)
+    }
+
+    .vplay-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--teal);
+      margin-left: 3px
+    }
+
+    .vid-platform {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .04em
+    }
+
+    .plat-yt {
+      background: #ff0000;
+      color: #fff
+    }
+
+    .plat-ig {
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      color: #fff
+    }
+
+    .vid-info {
+      padding: 1rem 1.2rem
+    }
+
+    .vid-cat {
+      font-size: .7rem;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 4px
+    }
+
+    .vid-info h4 {
+      font-family: var(--fh);
+      font-size: .9rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.4;
+      margin-bottom: 8px
+    }
+
+    .vid-info a {
+      font-size: .78rem;
+      color: var(--sky);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .vid-info a:hover {
+      text-decoration: underline
+    }
+
+    /* Video modal */
+    #vmodal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, .93);
+      align-items: center;
+      justify-content: center
+    }
+
+    #vmodal.open {
+      display: flex
+    }
+
+    #vmodal-inner {
+      width: min(860px, 94vw);
+      aspect-ratio: 16/9;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative
+    }
+
+    #vmodal-inner iframe {
+      width: 100%;
+      height: 100%;
+      border: none
+    }
+
+    #vmod-close {
+      position: absolute;
+      top: -42px;
+      right: 0;
+      background: none;
       border: none;
-      display: block;
+      color: #fff;
+      font-size: 1.8rem;
+      cursor: pointer
     }
 
-    .video-card .instagram-media {
-      min-width: 100% !important;
-      max-width: 100% !important;
-    }
-
-    /* ── TESTIMONIALS ── */
+    /* ── REVIEWS ── */
     .testimonials {
       background: #fff
     }
@@ -1391,6 +1584,47 @@
 
     .instagram .ssub {
       color: rgba(255, 255, 255, .62)
+    }
+
+    .ig-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-top: 2.4rem
+    }
+
+    .ig-post {
+      aspect-ratio: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform .2s;
+      text-decoration: none
+    }
+
+    .ig-post:hover {
+      transform: scale(1.04)
+    }
+
+    .ig-post-inner {
+      text-align: center;
+      color: rgba(255, 255, 255, .28)
+    }
+
+    .ig-post-inner svg {
+      width: 26px;
+      height: 26px;
+      fill: rgba(255, 255, 255, .18)
+    }
+
+    .ig-post-inner p {
+      font-size: .64rem;
+      margin-top: 3px
     }
 
     .ig-cta {
@@ -1686,6 +1920,53 @@
       margin-top: .7rem
     }
 
+
+
+    .reels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 25px;
+      align-items: start;
+    }
+
+    /* Instagram embed wrapper */
+    .reel-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      padding: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Force all embeds same width */
+    .instagram-media {
+      width: 100% !important;
+      min-width: 100% !important;
+      max-width: 420px !important;
+      margin: 0 auto !important;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 30px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      .reels-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .instagram-media {
+        max-width: 100% !important;
+      }
+    }
+
     /* ── FOOTER ── */
     footer {
       background: var(--dark);
@@ -1928,20 +2209,16 @@
         text-align: center
       }
 
+      .ig-grid {
+        grid-template-columns: repeat(3, 1fr)
+      }
+
       .form-row {
         grid-template-columns: 1fr
       }
 
       .gallery-masonry {
         columns: 2
-      }
-
-      .video-card {
-        width: 240px;
-      }
-
-      .video-card iframe {
-        height: 420px;
       }
     }
 
@@ -1954,6 +2231,10 @@
         padding: 96px 5% 56px
       }
 
+      .ig-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
       .why-stats {
         grid-template-columns: 1fr 1fr
       }
@@ -1961,23 +2242,103 @@
       .gallery-masonry {
         columns: 2
       }
-
-      .videos {
-        padding: 60px 14px;
-      }
-
-      .video-card {
-        width: 220px;
-      }
-
-      .video-card iframe {
-        height: 390px;
-      }
-
-      .category-head h3 {
-        font-size: 1.1rem;
-      }
     }
+    .videos{
+  padding:80px 20px;
+}
+
+.video-category{
+  margin-bottom:60px;
+}
+
+.category-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+
+.category-head h3{
+  font-size:1.4rem;
+  font-weight:700;
+}
+
+/* HORIZONTAL SCROLL */
+.video-row{
+  display:flex;
+  gap:18px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  padding-bottom:10px;
+}
+
+.video-row::-webkit-scrollbar{
+  height:6px;
+}
+
+.video-row::-webkit-scrollbar-thumb{
+  background:#ccc;
+  border-radius:20px;
+}
+
+/* VIDEO CARD */
+.video-card{
+  flex:0 0 auto;
+  width:280px;
+  border-radius:20px;
+  overflow:hidden;
+  background:#111;
+  scroll-snap-align:start;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* YOUTUBE */
+.video-card iframe{
+  width:100%;
+  height:500px;
+  border:none;
+  display:block;
+}
+
+/* INSTAGRAM EMBED FIX */
+.instagram-media{
+  min-width:100% !important;
+  max-width:100% !important;
+}
+
+/* TABLET */
+@media(max-width:768px){
+
+  .video-card{
+    width:240px;
+  }
+
+  .video-card iframe{
+    height:420px;
+  }
+
+}
+
+/* MOBILE */
+@media(max-width:480px){
+
+  .videos{
+    padding:60px 14px;
+  }
+
+  .video-card{
+    width:220px;
+  }
+
+  .video-card iframe{
+    height:390px;
+  }
+
+  .category-head h3{
+    font-size:1.1rem;
+  }
+
+}
   </style>
 </head>
 
@@ -2418,6 +2779,20 @@
       <p class="ssub fu d2">Real sessions, real progress — a glimpse into the care and dedication behind every recovery
         journey, from celebrity patients to sports physio and stroke rehabilitation.</p>
 
+      <!--
+    ═══════════════════════════════════════════════════════════════════
+    HOW TO ADD IMAGES:
+    Place all images inside your /assets/ folder.
+    Replace the src values below with your actual filenames.
+    Images are grouped visually but display without category filters.
+
+    Suggested naming:
+      Celebrity patients  → assets/celebrity1.jpg, celebrity2.jpg ...
+      Sports physio       → assets/sports1.jpg, sports2.jpg ...
+      Stroke rehab        → assets/stroke1.jpg, stroke2.jpg ...
+      General patients    → assets/patient1.jpg, patient2.jpg ...
+    ═══════════════════════════════════════════════════════════════════
+    -->
       <div class="gallery-masonry fu d3" id="galleryGrid">
         <!-- Celebrity Patients -->
         <div class="g-item"><img src="assets/celebrity1.jpeg" alt="Celebrity patient session" loading="lazy"
@@ -2524,72 +2899,238 @@
     <div id="lb-caption"></div>
   </div>
 
-  <!-- ═══ VIDEOS - DYNAMIC FROM GOOGLE SHEETS ═══ -->
-  <section id="videos" class="videos">
-    <div class="si">
-      <div class="slabel">Video Content</div>
-      <h2 class="stitle">Reels, Exercises & Education</h2>
-      <p class="ssub">Watch therapy demonstrations, exercise guides, and recovery insights from Dr. Abhay.</p>
+  <!-- ═══ VIDEOS ═══ -->
+<section id="videos" class="videos">
 
-      <!-- TRENDING -->
-      <div class="video-category" data-category="trending">
-        <div class="category-head">
-          <h3>🔥 Trending Videos</h3>
-        </div>
-        <div class="video-row"></div>
+  <div class="si">
+
+    <div class="slabel">Video Content</div>
+
+    <h2 class="stitle">
+      Reels, Exercises & Education
+    </h2>
+
+    <p class="ssub">
+      Watch therapy demonstrations, exercise guides,
+      and recovery insights from Dr. Abhay.
+    </p>
+
+    <!-- TRENDING -->
+    <div class="video-category">
+
+      <div class="category-head">
+        <h3>🔥 Trending Videos</h3>
       </div>
 
-      <!-- POST OP -->
-      <div class="video-category" data-category="postop">
-        <div class="category-head">
-          <h3>🏥 Post-Operative Rehab</h3>
-        </div>
-        <div class="video-row"></div>
-      </div>
+      <div class="video-row">
 
-      <!-- CONDITIONS -->
-      <div class="video-category" data-category="conditions">
-        <div class="category-head">
-          <h3>🩺 By Conditions</h3>
+        <div class="video-card">
+          <blockquote
+            class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/reel/DUlbfE0D1sO/"
+            data-instgrm-version="14">
+          </blockquote>
         </div>
-        <div class="video-row"></div>
-      </div>
 
-      <!-- STROKE -->
-      <div class="video-category" data-category="stroke">
-        <div class="category-head">
-          <h3>🧠 Stroke Rehab</h3>
+        <div class="video-card">
+          <blockquote
+            class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/reel/DXzREjWM4Sk/"
+            data-instgrm-version="14">
+          </blockquote>
         </div>
-        <div class="video-row"></div>
-      </div>
 
-      <!-- OTHER INSTAGRAM -->
-      <div class="video-category" data-category="other">
-        <div class="category-head">
-          <h3>📹 More Videos</h3>
-        </div>
-        <div class="video-row"></div>
-      </div>
-
-      <!-- YOUTUBE SHORTS -->
-      <div class="video-category" data-category="youtube">
-        <div class="category-head">
-          <h3>▶ YouTube Shorts</h3>
-        </div>
-        <div class="video-row"></div>
       </div>
     </div>
-  </section>
 
-  <!-- ═══ TESTIMONIALS ═══ -->
+    <!-- POST OP -->
+    <div class="video-category">
+
+      <div class="category-head">
+        <h3>🏥 Post-Operative Rehab</h3>
+      </div>
+
+      <div class="video-row">
+
+        <div class="video-card">
+          <blockquote
+            class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/reel/DU53v7dkpjJ/"
+            data-instgrm-version="14">
+          </blockquote>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CONDITIONS -->
+    <div class="video-category">
+
+      <div class="category-head">
+        <h3>🩺 By Conditions</h3>
+      </div>
+
+      <div class="video-row">
+
+        <div class="video-card">
+          <blockquote
+            class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/reel/DVBmuJDDIU3/"
+            data-instgrm-version="14">
+          </blockquote>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- STROKE -->
+    <div class="video-category">
+
+      <div class="category-head">
+        <h3>🧠 Stroke Rehab</h3>
+      </div>
+
+      <div class="video-row">
+
+        <div class="video-card">
+          <blockquote
+            class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/reel/DW_zGSVDGtb/"
+            data-instgrm-version="14">
+          </blockquote>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- OTHER INSTAGRAM -->
+    <div class="video-category">
+
+      <div class="category-head">
+        <h3>📹 More Videos</h3>
+      </div>
+
+      <div class="video-row">
+
+        <div class="video-card">
+          <blockquote class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/reel/DXhVMZEj_bh/"
+            data-instgrm-version="14">
+          </blockquote>
+        </div>
+
+        <div class="video-card">
+          <blockquote class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/reel/DXmhKXhjG0j/"
+            data-instgrm-version="14">
+          </blockquote>
+        </div>
+
+        <div class="video-card">
+          <blockquote class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/reel/DXRyq6BDDnS/"
+            data-instgrm-version="14">
+          </blockquote>
+        </div>
+
+        <div class="video-card">
+          <blockquote class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/reel/DYZ_hXdMLDB/"
+            data-instgrm-version="14">
+          </blockquote>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- YOUTUBE SHORTS -->
+    <div class="video-category">
+
+      <div class="category-head">
+        <h3>▶ YouTube Shorts</h3>
+      </div>
+
+      <div class="video-row">
+
+        <div class="video-card yt">
+          <iframe
+            src="https://www.youtube.com/embed/UNB0C9ru_aA"
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+        </div>
+
+        <div class="video-card yt">
+          <iframe
+            src="https://www.youtube.com/embed/b0aEYswg4CQ"
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+        </div>
+
+        <div class="video-card yt">
+          <iframe
+            src="https://www.youtube.com/embed/bqPVRuD1gXA"
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+        </div>
+
+        <div class="video-card yt">
+          <iframe
+            src="https://www.youtube.com/embed/eJYUxpBPtMk"
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+        </div>
+
+        <div class="video-card yt">
+          <iframe
+            src="https://www.youtube.com/embed/I-TU4KxP4T4"
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+        </div>
+
+        <div class="video-card yt">
+          <iframe
+            src="https://www.youtube.com/embed/rx38rs99538"
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+        </div>
+
+        <div class="video-card yt">
+          <iframe
+            src="https://www.youtube.com/embed/1s3pDGbK59w"
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+  <!-- VIDEO MODAL -->
+  <div id="vmodal">
+    <div id="vmodal-inner"><button id="vmod-close">✕</button><iframe id="vmodal-iframe" src="" allowfullscreen
+        allow="autoplay"></iframe></div>
+  </div>
+
+  <!-- ═══ TESTIMONIALS — REAL GOOGLE REVIEWS ═══ -->
   <section id="testimonials" class="testimonials">
     <div class="si">
       <div class="slabel fu">Patient Reviews</div>
       <h2 class="stitle fu d1">Real Google Reviews</h2>
       <p class="ssub fu d2">Verified patient experiences from Google — shared by real people who recovered with Dr.
         Abhay at Popular Health Checkup Centre.</p>
-      <div class="sk-ww-google-reviews" data-embed-id="25687236"></div>
-      <script src="https://widgets.sociablekit.com/google-reviews/widget.js" defer></script>
+        <div class="sk-ww-google-reviews" data-embed-id="25687236"></div><script src="https://widgets.sociablekit.com/google-reviews/widget.js" defer></script>
+<div class="elfsight-app-656a4201-291f-40c1-b7c8-ff16ad6f5f08" data-elfsight-app-lazy></div>
       <div class="reviews-grid fu d3" id="reviewsGrid"></div>
       <div class="google-cta fu">
         <a href="https://maps.app.goo.gl/gU4s8qGKj7vE5rPYA" target="_blank" class="google-btn">
@@ -2607,8 +3148,10 @@
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               fill="#EA4335" />
           </svg>
+          
           View All Reviews on Google Maps · Leave a Review
         </a>
+        
       </div>
     </div>
   </section>
@@ -2620,6 +3163,56 @@
       <h2 class="stitle fu d1">Physiotherapy Tips & Recovery Insights</h2>
       <p class="ssub fu d2">Follow Dr. Abhay on Instagram for evidence-based exercise tips, therapy education, and
         recovery inspiration.</p>
+      <!-- <div class="ig-grid fu d3">
+        <a href="https://www.instagram.com/dr.abhaysharma5169" target="_blank" class="ig-post">
+          <div class="ig-post-inner"><svg viewBox="0 0 24 24">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+            </svg>
+            <p>Profile</p>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/dr.abhaysharma5169" target="_blank" class="ig-post">
+          <div class="ig-post-inner"><svg viewBox="0 0 24 24">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+            </svg>
+            <p>Reels</p>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/dr.abhaysharma5169" target="_blank" class="ig-post">
+          <div class="ig-post-inner"><svg viewBox="0 0 24 24">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+            </svg>
+            <p>Tips</p>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/dr.abhaysharma5169" target="_blank" class="ig-post">
+          <div class="ig-post-inner"><svg viewBox="0 0 24 24">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+            </svg>
+            <p>Exercises</p>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/dr.abhaysharma5169" target="_blank" class="ig-post">
+          <div class="ig-post-inner"><svg viewBox="0 0 24 24">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+            </svg>
+            <p>Women's</p>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/dr.abhaysharma5169" target="_blank" class="ig-post">
+          <div class="ig-post-inner"><svg viewBox="0 0 24 24">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+            </svg>
+            <p>Education</p>
+          </div>
+        </a>
+      </div> -->
       <div class="ig-cta fu d4"><a href="https://www.instagram.com/dr.abhaysharma5169" target="_blank"
           class="ig-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="white">
             <path
@@ -2637,8 +3230,7 @@
         <div class="faq-item"><button class="faq-q">How many physiotherapy sessions will I need?<div class="faq-icon">
               <svg viewBox="0 0 24 24">
                 <path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-              </svg>
-            </div></button>
+              </svg></div></button>
           <div class="faq-a">
             <div class="faq-a-inner">It varies depending on your condition and individual recovery response. During your
               initial assessment, Dr. Abhay will give a clear estimate. Most conditions respond well within 6–12
@@ -2649,8 +3241,7 @@
         <div class="faq-item"><button class="faq-q">Do you provide rehabilitation after surgery?<div class="faq-icon">
               <svg viewBox="0 0 24 24">
                 <path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-              </svg>
-            </div></button>
+              </svg></div></button>
           <div class="faq-a">
             <div class="faq-a-inner">Absolutely. Post-operative rehabilitation is a core specialization. Whether it's a
               joint replacement, ligament repair, or spinal surgery, we provide structured, stage-by-stage recovery
@@ -2744,9 +3335,7 @@
           </a>
           <div class="clinic-box">
             <h4>📍 Popular Health Checkup Centre</h4>
-            <p><strong>Address:</strong> Shop no. 02, Shalik Lodi society, Main Rickshaw Stand, Ganesh Chowk, Kajupada,
-              Borivali East, Mumbai, Maharashtra 400066<br><strong>Timings:</strong> Open till 10 AM -
-              11PM<br><strong>Home Visits:</strong> Available — contact us on WhatsApp</p>
+            <p><strong>Address:</strong> Shop no. 02, Shalik Lodi society, Main Rickshaw Stand, Ganesh Chowk, Kajupada, Borivali East, Mumbai, Maharashtra 400066<br><strong>Timings:</strong> Open till 10 AM - 11PM<br><strong>Home Visits:</strong> Available — contact us on WhatsApp</p>
           </div>
           <a href="https://maps.app.goo.gl/gU4s8qGKj7vE5rPYA" target="_blank" class="map-link"><svg viewBox="0 0 24 24">
               <path
@@ -2873,188 +3462,144 @@
   </footer>
 
   <script>
-    
+    /* ═══════════════════════════════════════════════════════════════════
+       ██  REAL GOOGLE REVIEWS — extracted from screenshots
+       ═══════════════════════════════════════════════════════════════════ */
+    const REVIEWS = [
+     /* {
+        name: "Sumesh Jose", initials: "SJ", badge: "",
+        type: "Stroke Rehabilitation", date: "3 months ago", rating: 5, featured: true,
+        text: "My Dad suffered a stroke in December 2024. The neurologist recommended physiotherapy after discharge, which led us to Dr. Abhay Sharma at Popular Health Checkup Centre. He visited our house 2–3 times a week, conducted sessions, and recommended diet guidance. After a couple of weeks, the change was evident — to everyone's surprise, my Dad started walking and doing things by himself. Thanks to Dr. Abhay's valuable support and guidance, my Dad is able to travel today and lead a normal life."
+      },
+      {
+        name: "Bhagwan Gaikwad", initials: "BG", badge: "",
+        type: "Spinal Cord Injury Rehabilitation", date: "3 months ago", rating: 5, featured: true,
+        text: "I am suffering from spinal cord injury and Dr. Abhay Sharma has been treating me for more than a year. My body was totally paralysed — now I can move both hands and sensation has returned. I have had a wonderful experience with him; he not only treats us but shares his medical knowledge about the disease."
+      },
+      {
+        name: "Pawan Gupta", initials: "PG", badge: "Local Guide · 56 reviews",
+        type: "General Physiotherapy", date: "3 months ago", rating: 5, featured: false,
+        text: "He is very sincere in his approach, very patient friendly, focused and calm — and improving day by day. On the way to becoming one of the best in his business."
+      },
+      {
+        name: "Tamana Chawla", initials: "TC", badge: "Local Guide · 13 reviews",
+        type: "Orthopedic Physiotherapy", date: "2 months ago", rating: 5, featured: false,
+        text: "Dr. Abhay — a knowledgeable and sincere physiotherapist. He quickly identifies the root cause and focuses on treating it effectively. Highly professional and approachable."
+      },
+      {
+        name: "Neha S", initials: "NS", badge: "",
+        type: "General Physiotherapy", date: "3 months ago", rating: 5, featured: false,
+        text: "He is an excellent physiotherapist. Gives personal guidance and advice."
+      },
+      {
+        name: "Santosh Mohapatra", initials: "SM", badge: "11 reviews",
+        type: "General Physiotherapy", date: "3 months ago", rating: 5, featured: false,
+        text: "Dr. Abhay is excellent. Very personal care he takes and is excellent in physiotherapy — very diligently cares. Great hands and excellent behaviour. Strongly recommend."
+      },
+      {
+        name: "Shiv Shiv", initials: "SS", badge: "",
+        type: "Back, Knee & Neck Pain", date: "a month ago", rating: 5, featured: false,
+        text: "Facing back, knee & neck pain — after taking treatment from Abhay Sharma everything will be aligned and feeling better."
+      },
+      {
+        name: "Mohit Malhotra", initials: "MM", badge: "3 reviews",
+        type: "Neck Treatment", date: "a month ago", rating: 5, featured: false,
+        text: "Getting neck treatment from Dr. Abhay and seeing significant improvement."
+      },
+      {
+        name: "Manav Sevarth Foundation Trust", initials: "MF", badge: "2 reviews",
+        type: "Institutional Review", date: "a year ago", rating: 5, featured: false,
+        text: "Best Results and services."
+      }*/
+    ];
 
-
+    /* Avatar colors */
+    const AV_COLORS = ["#0F766E", "#2563EB", "#7c3aed", "#db2777", "#d97706", "#059669", "#dc2626", "#0891b2", "#65a30d"];
+    (function renderReviews() {
+      const g = document.getElementById('reviewsGrid');
+      if (!g) return;
+      g.innerHTML = REVIEWS.map((r, i) => `
+    <div class="rev-card${r.featured ? ' featured' : ''}">
+      <div class="rev-stars">${'⭐'.repeat(r.rating)}</div>
+      <p class="rev-text">"${r.text}"</p>
+      <div class="rev-author">
+        <div class="rev-av" style="background:${AV_COLORS[i % AV_COLORS.length]}">${r.initials}</div>
+        <div>
+          <div class="rev-name">${r.name}${r.badge ? `<span class="rev-local-badge">✦ ${r.badge}</span>` : ''}</div>
+          <div class="rev-meta">${r.type} · ${r.date}</div>
+        </div>
+      </div>
+    </div>`).join('');
+    })();
 
     /* ═══════════════════════════════════════════════════════════════════
-   ██  GOOGLE SHEETS API V4 - VIDEO CMS
-   ═══════════════════════════════════════════════════════════════════ */
+       ██  VIDEOS DATA — replace dummy links with real ones
+       ═══════════════════════════════════════════════════════════════════
+       platform: "youtube" | "instagram"
+       embedUrl: YouTube embed URL (for modal). Leave "" for Instagram reels.
+       link: Full URL to video page.
+       thumb: Thumbnail image path in assets/ folder.
+       ═══════════════════════════════════════════════════════════════════ */
+    const VIDEOS = {
 
-// ─── CONFIG ───
-const API_KEY = 'AIzaSyBlAi_dnMigJzpAzrf1nuJNS-zZ5tl5V-M'; // ← REPLACE WITH YOUR API KEY
-const SHEET_ID = '190LGrEet-A0tactkZWF0ZxrAyj7-RIXLLjD-ZkPpu8E';
-const SHEET_NAME = 'Sheet1'; // ← Change if your sheet tab has a different name
-const SHEET_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
 
-let videoData = [];
-let isFetching = false;
+    };
 
-// ─── FETCH & RENDER ───
-async function fetchVideos() {
-    if (isFetching) return;
-    isFetching = true;
-    
-    try {
-        console.log('📊 Fetching videos from Google Sheets...');
-        const response = await fetch(SHEET_URL);
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error('API Error:', errorData);
-            throw new Error(`API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
-        }
-        
-        const data = await response.json();
-        const rows = data.values || [];
-        
-        if (rows.length < 2) {
-            throw new Error('No data found. Make sure you have headers and at least one row.');
-        }
-        
-        // Get headers (first row)
-        const headers = rows[0].map(h => h.trim().toLowerCase());
-        const catIdx = headers.indexOf('category');
-        const linkIdx = headers.indexOf('link');
-        const statusIdx = headers.indexOf('status');
-        
-        if (catIdx === -1 || linkIdx === -1) {
-            console.warn('Headers found:', headers);
-            throw new Error('Required columns "Category" or "Link" not found.');
-        }
-        
-        // Parse rows (skip header row)
-        videoData = rows.slice(1).map(row => {
-            const link = linkIdx >= 0 ? row[linkIdx]?.trim() || '' : '';
-            return {
-                category: catIdx >= 0 ? row[catIdx]?.trim() || '' : '',
-                link: link,
-                status: statusIdx >= 0 ? row[statusIdx]?.trim() || '' : 'Hide',
-                platform: link.includes('youtube.com') || link.includes('youtu.be') ? 'youtube' : 'instagram'
-            };
-        }).filter(v => v.category && v.link && v.status === 'Show');
-        
-        console.log(`✅ Loaded ${videoData.length} videos`);
-        
-        // Sort: newest first (reverse of sheet order)
-        videoData.reverse();
-        
-        // Render categories
-        renderVideoCategory('trending', videoData.filter(v => v.category === 'trending'));
-        renderVideoCategory('postop', videoData.filter(v => v.category === 'postop'));
-        renderVideoCategory('conditions', videoData.filter(v => v.category === 'conditions'));
-        renderVideoCategory('stroke', videoData.filter(v => v.category === 'stroke'));
-        renderVideoCategory('other', videoData.filter(v => v.category === 'other'));
-        renderVideoCategory('youtube', videoData.filter(v => v.category === 'youtube'));
-        
-    } catch (error) {
-        console.error('❌ Error loading videos:', error);
-        document.querySelectorAll('.video-row').forEach(row => {
-            if (!row.hasChildNodes()) {
-                row.innerHTML = `<div style="padding:20px;color:#666;width:100%;text-align:center;background:#f8f8f8;border-radius:12px;">
-                    ⚠️ Unable to load videos. ${error.message}
-                </div>`;
-            }
-        });
-    } finally {
-        isFetching = false;
+    function videoCard(v) {
+      const isYT = v.platform === 'youtube';
+      const gradients = ['linear-gradient(135deg,#0F766E,#0c4a6e)', 'linear-gradient(135deg,#2563EB,#0F766E)', 'linear-gradient(135deg,#7c3aed,#0F766E)', 'linear-gradient(135deg,#db2777,#0F766E)'];
+      const bg = v.thumb ? `url('${v.thumb}') center/cover` : gradients[Math.floor(Math.random() * gradients.length)];
+      const clickAction = isYT && v.embedUrl ? `openVideo('${v.embedUrl}')` : `window.open('${v.link}','_blank')`;
+      return `<div class="vid-card">
+    <div class="vid-thumb" onclick="${clickAction}">
+      <div style="position:absolute;inset:0;background:${bg}"></div>
+      <span class="vid-platform ${isYT ? 'plat-yt' : 'plat-ig'}">${isYT ? '▶ YouTube' : '📸 Instagram'}</span>
+      <div class="vid-play-overlay"><div class="vplay-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    </div>
+    <div class="vid-info">
+      <h4>${v.title}</h4>
+      <a href="${v.link}" target="_blank">Watch on ${isYT ? 'YouTube' : 'Instagram'} →</a>
+    </div>
+  </div>`;
     }
-}
-
-// ─── RENDER FUNCTION ───
-function renderVideoCategory(category, videos) {
-    const container = document.querySelector(`[data-category="${category}"] .video-row`);
-    if (!container) return;
-    
-    if (videos.length === 0) {
-        container.innerHTML = `<div style="padding:20px;color:#888;width:100%;text-align:center;font-size:0.9rem;background:#f8f8f8;border-radius:12px;">
-            No videos in this category yet
-        </div>`;
-        return;
+    function renderVideos() {
+      const map = { trending: 'grid-trending', postop: 'grid-postop', viral: 'grid-viral', conditions: 'grid-conditions', stroke: 'grid-stroke', other: 'grid-other' };
+      Object.entries(map).forEach(([key, id]) => {
+        const el = document.getElementById(id);
+        if (el && VIDEOS[key]) el.innerHTML = VIDEOS[key].map(videoCard).join('');
+      });
     }
-    
-    container.innerHTML = videos.map(v => {
-        const isYT = v.platform === 'youtube';
-        return `
-            <div class="video-card">
-                ${isYT ? `
-                    <iframe src="${v.link}" allowfullscreen loading="lazy"></iframe>
-                ` : `
-                    <blockquote class="instagram-media" 
-                        data-instgrm-permalink="${v.link}" 
-                        data-instgrm-version="14"
-                        style="width:100%;min-width:100%;max-width:420px !important;margin:0 auto !important;">
-                    </blockquote>
-                `}
-            </div>
-        `;
-    }).join('');
-    
-    // Re-initialize Instagram embeds
-    if (window.instgrm && videos.some(v => v.platform === 'instagram')) {
-        setTimeout(() => {
-            window.instgrm.Embeds.process();
-        }, 1500);
+    renderVideos();
+
+    function openVideo(url) {
+      document.getElementById('vmodal-iframe').src = url + '?autoplay=1';
+      document.getElementById('vmodal').classList.add('open');
     }
-}
+    document.getElementById('vmod-close').onclick = () => { document.getElementById('vmodal').classList.remove('open'); document.getElementById('vmodal-iframe').src = ''; };
+    document.getElementById('vmodal').onclick = function (e) { if (e.target === this) { this.classList.remove('open'); document.getElementById('vmodal-iframe').src = ''; } };
 
-// ─── AUTO-REFRESH ───
-document.addEventListener('DOMContentLoaded', () => {
-    fetchVideos();
-    setInterval(fetchVideos, 30000);
-    document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) fetchVideos();
-    });
-});
+    /* ═══ LIGHTBOX ═══ */
+    let lbImgs = [], lbIdx = 0;
+    function buildLB() {
+      lbImgs = Array.from(document.querySelectorAll('#galleryGrid .g-item img'));
+      lbImgs.forEach((img, i) => { img.closest('.g-item').addEventListener('click', () => openLB(i)); });
+    }
+    function openLB(i) { lbIdx = i; document.getElementById('lb-img').src = lbImgs[i].src; document.getElementById('lb-caption').textContent = lbImgs[i].alt || ''; document.getElementById('lightbox').classList.add('open'); }
+    document.getElementById('lb-close').onclick = () => document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lb-prev').onclick = () => { lbIdx = (lbIdx - 1 + lbImgs.length) % lbImgs.length; document.getElementById('lb-img').src = lbImgs[lbIdx].src; document.getElementById('lb-caption').textContent = lbImgs[lbIdx].alt || ''; };
+    document.getElementById('lb-next').onclick = () => { lbIdx = (lbIdx + 1) % lbImgs.length; document.getElementById('lb-img').src = lbImgs[lbIdx].src; document.getElementById('lb-caption').textContent = lbImgs[lbIdx].alt || ''; };
+    document.getElementById('lightbox').onclick = function (e) { if (e.target === this) this.classList.remove('open'); };
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open'); if (e.key === 'ArrowLeft') document.getElementById('lb-prev').click(); if (e.key === 'ArrowRight') document.getElementById('lb-next').click(); });
 
-/* ═══════════════════════════════════════════════════════════════════
-   ██  REAL GOOGLE REVIEWS
-   ═══════════════════════════════════════════════════════════════════ */
-const REVIEWS = [
-    // Add your Google reviews here
-];
-
-/* Avatar colors */
-const AV_COLORS = ["#0F766E", "#2563EB", "#7c3aed", "#db2777", "#d97706", "#059669", "#dc2626", "#0891b2", "#65a30d"];
-(function renderReviews() {
-    const g = document.getElementById('reviewsGrid');
-    if (!g) return;
-    g.innerHTML = REVIEWS.map((r, i) => `
-    <div class="rev-card${r.featured ? ' featured' : ''}">
-        <div class="rev-stars">${'⭐'.repeat(r.rating)}</div>
-        <p class="rev-text">"${r.text}"</p>
-        <div class="rev-author">
-            <div class="rev-av" style="background:${AV_COLORS[i % AV_COLORS.length]}">${r.initials}</div>
-            <div>
-                <div class="rev-name">${r.name}${r.badge ? `<span class="rev-local-badge">✦ ${r.badge}</span>` : ''}</div>
-                <div class="rev-meta">${r.type} · ${r.date}</div>
-            </div>
-        </div>
-    </div>`).join('');
-})();
-
-/* ═══ LIGHTBOX ═══ */
-let lbImgs = [], lbIdx = 0;
-function buildLB() {
-    lbImgs = Array.from(document.querySelectorAll('#galleryGrid .g-item img'));
-    lbImgs.forEach((img, i) => { img.closest('.g-item').addEventListener('click', () => openLB(i)); });
-}
-function openLB(i) { lbIdx = i; document.getElementById('lb-img').src = lbImgs[i].src; document.getElementById('lb-caption').textContent = lbImgs[i].alt || ''; document.getElementById('lightbox').classList.add('open'); }
-document.getElementById('lb-close').onclick = () => document.getElementById('lightbox').classList.remove('open');
-document.getElementById('lb-prev').onclick = () => { lbIdx = (lbIdx - 1 + lbImgs.length) % lbImgs.length; document.getElementById('lb-img').src = lbImgs[lbIdx].src; document.getElementById('lb-caption').textContent = lbImgs[lbIdx].alt || ''; };
-document.getElementById('lb-next').onclick = () => { lbIdx = (lbIdx + 1) % lbImgs.length; document.getElementById('lb-img').src = lbImgs[lbIdx].src; document.getElementById('lb-caption').textContent = lbImgs[lbIdx].alt || ''; };
-document.getElementById('lightbox').onclick = function(e) { if (e.target === this) this.classList.remove('open'); };
-document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open'); if (e.key === 'ArrowLeft') document.getElementById('lb-prev').click(); if (e.key === 'ArrowRight') document.getElementById('lb-next').click(); });
-
-/* ═══ WHATSAPP FORM ═══ */
-function sendWA() {
-    const name = document.getElementById('f-name').value.trim();
-    const phone = document.getElementById('f-phone').value.trim();
-    const service = document.getElementById('f-service').value;
-    const timing = document.getElementById('f-timing').value;
-    const msg = document.getElementById('f-msg').value.trim();
-    if (!name || !phone) { alert('Please enter your name and phone number.'); return; }
-    const text = [
+    /* ═══ WHATSAPP FORM ═══ */
+    function sendWA() {
+      const name = document.getElementById('f-name').value.trim();
+      const phone = document.getElementById('f-phone').value.trim();
+      const service = document.getElementById('f-service').value;
+      const timing = document.getElementById('f-timing').value;
+      const msg = document.getElementById('f-msg').value.trim();
+      if (!name || !phone) { alert('Please enter your name and phone number.'); return; }
+      const text = [
         '🙏 Hello Doctor, I would like to book a physiotherapy consultation.',
         '',
         `👤 *Name:* ${name}`,
@@ -3062,24 +3607,24 @@ function sendWA() {
         service ? `🏥 *Service:* ${service}` : '',
         timing ? `🕐 *Preferred Timing:* ${timing}` : '',
         msg ? `📝 *Condition / Query:*\n${msg}` : '',
-    ].filter(Boolean).join('\n');
-    window.open('https://wa.me/919702437345?text=' + encodeURIComponent(text), '_blank');
-}
+      ].filter(Boolean).join('\n');
+      window.open('https://wa.me/919702437345?text=' + encodeURIComponent(text), '_blank');
+    }
 
-/* ═══ NAV / SCROLL / FAQ ═══ */
-window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20), { passive: true });
-document.getElementById('hamburger').addEventListener('click', () => document.getElementById('mobMenu').classList.toggle('open'));
-document.querySelectorAll('#mobMenu a').forEach(a => a.addEventListener('click', () => document.getElementById('mobMenu').classList.remove('open')));
-document.querySelectorAll('.faq-q').forEach(btn => {
-    btn.addEventListener('click', () => {
+    /* ═══ NAV / SCROLL / FAQ ═══ */
+    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20), { passive: true });
+    document.getElementById('hamburger').addEventListener('click', () => document.getElementById('mobMenu').classList.toggle('open'));
+    document.querySelectorAll('#mobMenu a').forEach(a => a.addEventListener('click', () => document.getElementById('mobMenu').classList.remove('open')));
+    document.querySelectorAll('.faq-q').forEach(btn => {
+      btn.addEventListener('click', () => {
         const item = btn.parentElement, isOpen = item.classList.contains('open');
         document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
         if (!isOpen) item.classList.add('open');
+      });
     });
-});
-const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }), { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
-document.querySelectorAll('.fu').forEach(el => obs.observe(el));
-window.addEventListener('load', buildLB);
+    const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }), { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
+    document.querySelectorAll('.fu').forEach(el => obs.observe(el));
+    window.addEventListener('load', buildLB);
   </script>
 </body>
 
