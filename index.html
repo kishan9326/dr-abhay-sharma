@@ -2533,37 +2533,49 @@
 
       <!-- TRENDING -->
       <div class="video-category" data-category="trending">
-        <div class="category-head"><h3>🔥 Trending Videos</h3></div>
+        <div class="category-head">
+          <h3>🔥 Trending Videos</h3>
+        </div>
         <div class="video-row"></div>
       </div>
 
       <!-- POST OP -->
       <div class="video-category" data-category="postop">
-        <div class="category-head"><h3>🏥 Post-Operative Rehab</h3></div>
+        <div class="category-head">
+          <h3>🏥 Post-Operative Rehab</h3>
+        </div>
         <div class="video-row"></div>
       </div>
 
       <!-- CONDITIONS -->
       <div class="video-category" data-category="conditions">
-        <div class="category-head"><h3>🩺 By Conditions</h3></div>
+        <div class="category-head">
+          <h3>🩺 By Conditions</h3>
+        </div>
         <div class="video-row"></div>
       </div>
 
       <!-- STROKE -->
       <div class="video-category" data-category="stroke">
-        <div class="category-head"><h3>🧠 Stroke Rehab</h3></div>
+        <div class="category-head">
+          <h3>🧠 Stroke Rehab</h3>
+        </div>
         <div class="video-row"></div>
       </div>
 
       <!-- OTHER INSTAGRAM -->
       <div class="video-category" data-category="other">
-        <div class="category-head"><h3>📹 More Videos</h3></div>
+        <div class="category-head">
+          <h3>📹 More Videos</h3>
+        </div>
         <div class="video-row"></div>
       </div>
 
       <!-- YOUTUBE SHORTS -->
       <div class="video-category" data-category="youtube">
-        <div class="category-head"><h3>▶ YouTube Shorts</h3></div>
+        <div class="category-head">
+          <h3>▶ YouTube Shorts</h3>
+        </div>
         <div class="video-row"></div>
       </div>
     </div>
@@ -2625,7 +2637,8 @@
         <div class="faq-item"><button class="faq-q">How many physiotherapy sessions will I need?<div class="faq-icon">
               <svg viewBox="0 0 24 24">
                 <path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-              </svg></div></button>
+              </svg>
+            </div></button>
           <div class="faq-a">
             <div class="faq-a-inner">It varies depending on your condition and individual recovery response. During your
               initial assessment, Dr. Abhay will give a clear estimate. Most conditions respond well within 6–12
@@ -2636,7 +2649,8 @@
         <div class="faq-item"><button class="faq-q">Do you provide rehabilitation after surgery?<div class="faq-icon">
               <svg viewBox="0 0 24 24">
                 <path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-              </svg></div></button>
+              </svg>
+            </div></button>
           <div class="faq-a">
             <div class="faq-a-inner">Absolutely. Post-operative rehabilitation is a core specialization. Whether it's a
               joint replacement, ligament repair, or spinal surgery, we provide structured, stage-by-stage recovery
@@ -2730,7 +2744,9 @@
           </a>
           <div class="clinic-box">
             <h4>📍 Popular Health Checkup Centre</h4>
-            <p><strong>Address:</strong> Shop no. 02, Shalik Lodi society, Main Rickshaw Stand, Ganesh Chowk, Kajupada, Borivali East, Mumbai, Maharashtra 400066<br><strong>Timings:</strong> Open till 10 AM - 11PM<br><strong>Home Visits:</strong> Available — contact us on WhatsApp</p>
+            <p><strong>Address:</strong> Shop no. 02, Shalik Lodi society, Main Rickshaw Stand, Ganesh Chowk, Kajupada,
+              Borivali East, Mumbai, Maharashtra 400066<br><strong>Timings:</strong> Open till 10 AM -
+              11PM<br><strong>Home Visits:</strong> Available — contact us on WhatsApp</p>
           </div>
           <a href="https://maps.app.goo.gl/gU4s8qGKj7vE5rPYA" target="_blank" class="map-link"><svg viewBox="0 0 24 24">
               <path
@@ -2860,80 +2876,104 @@
     /* ═══════════════════════════════════════════════════════════════════
        ██  GOOGLE SHEETS INTEGRATION - VIDEO CMS
        ═══════════════════════════════════════════════════════════════════ */
-    
+
     // ─── CONFIG ───
     // 🔥 REPLACE THIS WITH YOUR ACTUAL GOOGLE SHEET ID
- const SHEET_ID = '190LGrEet-A0tactkZWF0ZxrAyj7-RIXLLjD-ZkPpu8E';
-    const SHEET_URL = `https://spreadsheets.google.com/feeds/list/${SHEET_ID}/od6/public/values?alt=json`;
+ 
+ // ─── CONFIG ───
+const SHEET_ID = '190LGrEet-A0tactkZWF0ZxrAyj7-RIXLLjD-ZkPpu8E';
+// Use the CSV export URL instead of JSON
+const SHEET_URL = `https://corsproxy.io/?https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+
+let videoData = [];
+let isFetching = false;
+
+async function fetchVideos() {
+    if (isFetching) return;
+    isFetching = true;
     
-    let videoData = [];
-    let isFetching = false;
-
-    // ─── FETCH & RENDER ───
-    async function fetchVideos() {
-        if (isFetching) return;
-        isFetching = true;
+    try {
+        const response = await fetch(SHEET_URL);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const csvText = await response.text();
         
-        try {
-            const response = await fetch(SHEET_URL);
-            if (!response.ok) throw new Error('Failed to fetch');
-            const data = await response.json();
-            
-            // Parse Google Sheets data
-            const entries = data.feed.entry || [];
-            videoData = entries.map(entry => ({
-                category: entry['gsx$category']?.$t?.trim() || '',
-                title: entry['gsx$title']?.$t?.trim() || 'Video',
-                link: entry['gsx$link']?.$t?.trim() || '',
-                status: entry['gsx$status']?.$t?.trim() || 'Hide',
-                platform: entry['gsx$platform']?.$t?.trim()?.toLowerCase() || 'instagram'
-            }));
-            
-            // Filter: only "Show" status
-            const show = videoData.filter(v => v.status === 'Show');
-            
-            // Sort: newest first (reverse order)
-            show.reverse();
-            
-            // Render categories
-            renderVideoCategory('trending', show.filter(v => v.category === 'trending'));
-            renderVideoCategory('postop', show.filter(v => v.category === 'postop'));
-            renderVideoCategory('conditions', show.filter(v => v.category === 'conditions'));
-            renderVideoCategory('stroke', show.filter(v => v.category === 'stroke'));
-            renderVideoCategory('other', show.filter(v => v.category === 'other'));
-            renderVideoCategory('youtube', show.filter(v => v.category === 'youtube'));
-            
-        } catch (error) {
-            console.error('Error loading videos:', error);
-            // Show fallback message
-            document.querySelectorAll('.video-row').forEach(row => {
-                if (!row.hasChildNodes()) {
-                    row.innerHTML = `<div style="padding:20px;color:#666;width:100%;text-align:center;background:#f8f8f8;border-radius:12px;">
-                        ⚠️ Unable to load videos. Please check internet connection.
-                    </div>`;
+        // Parse CSV
+        const lines = csvText.split('\n').filter(line => line.trim());
+        if (lines.length < 2) throw new Error('No data rows found');
+        
+        // Get headers
+        const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+        const catIdx = headers.findIndex(h => h.toLowerCase() === 'category');
+        const linkIdx = headers.findIndex(h => h.toLowerCase() === 'link');
+        const statusIdx = headers.findIndex(h => h.toLowerCase() === 'status');
+        
+        videoData = lines.slice(1).map(line => {
+            // Handle quoted CSV values properly
+            const cols = [];
+            let current = '';
+            let inQuotes = false;
+            for (const char of line) {
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    cols.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
                 }
-            });
-        } finally {
-            isFetching = false;
-        }
+            }
+            cols.push(current.trim());
+            
+            const link = linkIdx >= 0 ? cols[linkIdx] || '' : '';
+            return {
+                category: catIdx >= 0 ? cols[catIdx] || '' : '',
+                link: link,
+                status: statusIdx >= 0 ? cols[statusIdx] || '' : 'Hide',
+                platform: link.includes('youtube.com') ? 'youtube' : 'instagram'
+            };
+        }).filter(v => v.category && v.link && v.status === 'Show');
+        
+        // Sort: newest first
+        videoData.reverse();
+        
+        // Render categories
+        renderVideoCategory('trending', videoData.filter(v => v.category === 'trending'));
+        renderVideoCategory('postop', videoData.filter(v => v.category === 'postop'));
+        renderVideoCategory('conditions', videoData.filter(v => v.category === 'conditions'));
+        renderVideoCategory('stroke', videoData.filter(v => v.category === 'stroke'));
+        renderVideoCategory('other', videoData.filter(v => v.category === 'other'));
+        renderVideoCategory('youtube', videoData.filter(v => v.category === 'youtube'));
+        
+    } catch (error) {
+        console.error('Error loading videos:', error);
+        // Show user-friendly message
+        document.querySelectorAll('.video-row').forEach(row => {
+            if (!row.hasChildNodes()) {
+                row.innerHTML = `<div style="padding:20px;color:#666;width:100%;text-align:center;background:#f8f8f8;border-radius:12px;">
+                    ⚠️ Unable to load videos. Please refresh the page or try again later.
+                </div>`;
+            }
+        });
+    } finally {
+        isFetching = false;
     }
-
+}
     // ─── RENDER FUNCTION ───
     function renderVideoCategory(category, videos) {
-        const container = document.querySelector(`[data-category="${category}"] .video-row`);
-        if (!container) return;
-        
-        if (videos.length === 0) {
-            container.innerHTML = `<div style="padding:20px;color:#888;width:100%;text-align:center;font-size:0.9rem;background:#f8f8f8;border-radius:12px;">
+      const container = document.querySelector(`[data-category="${category}"] .video-row`);
+      if (!container) return;
+
+      if (videos.length === 0) {
+        container.innerHTML = `<div style="padding:20px;color:#888;width:100%;text-align:center;font-size:0.9rem;background:#f8f8f8;border-radius:12px;">
                 No videos in this category yet
             </div>`;
-            return;
-        }
-        
-        container.innerHTML = videos.map(v => {
-            const isYT = v.platform === 'youtube';
-            
-            return `
+        return;
+      }
+
+      container.innerHTML = videos.map(v => {
+        const isYT = v.platform === 'youtube';
+
+        return `
                 <div class="video-card">
                     ${isYT ? `
                         <iframe src="${v.link}" allowfullscreen loading="lazy"></iframe>
@@ -2946,48 +2986,48 @@
                     `}
                 </div>
             `;
-        }).join('');
-        
-        // Re-initialize Instagram embeds (if any Instagram posts were added)
-        if (window.instgrm && videos.some(v => v.platform === 'instagram')) {
-            setTimeout(() => {
-                window.instgrm.Embeds.process();
-            }, 1000);
-        }
+      }).join('');
+
+      // Re-initialize Instagram embeds (if any Instagram posts were added)
+      if (window.instgrm && videos.some(v => v.platform === 'instagram')) {
+        setTimeout(() => {
+          window.instgrm.Embeds.process();
+        }, 1000);
+      }
     }
 
     // ─── AUTO-REFRESH ───
     function autoRefresh() {
-        fetchVideos();
+      fetchVideos();
     }
 
     // ─── INIT ───
     document.addEventListener('DOMContentLoaded', () => {
-        // Initial load
-        fetchVideos();
-        
-        // Auto-refresh every 30 seconds
-        setInterval(autoRefresh, 10000);
-        
-        // Also refresh when tab becomes visible again
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) fetchVideos();
-        });
+      // Initial load
+      fetchVideos();
+
+      // Auto-refresh every 30 seconds
+      setInterval(autoRefresh, 10000);
+
+      // Also refresh when tab becomes visible again
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) fetchVideos();
+      });
     });
 
     /* ═══════════════════════════════════════════════════════════════════
        ██  REAL GOOGLE REVIEWS
        ═══════════════════════════════════════════════════════════════════ */
     const REVIEWS = [
-        // Add your Google reviews here
+      // Add your Google reviews here
     ];
 
     /* Avatar colors */
     const AV_COLORS = ["#0F766E", "#2563EB", "#7c3aed", "#db2777", "#d97706", "#059669", "#dc2626", "#0891b2", "#65a30d"];
     (function renderReviews() {
-        const g = document.getElementById('reviewsGrid');
-        if (!g) return;
-        g.innerHTML = REVIEWS.map((r, i) => `
+      const g = document.getElementById('reviewsGrid');
+      if (!g) return;
+      g.innerHTML = REVIEWS.map((r, i) => `
         <div class="rev-card${r.featured ? ' featured' : ''}">
             <div class="rev-stars">${'⭐'.repeat(r.rating)}</div>
             <p class="rev-text">"${r.text}"</p>
@@ -3004,48 +3044,48 @@
     /* ═══ LIGHTBOX ═══ */
     let lbImgs = [], lbIdx = 0;
     function buildLB() {
-        lbImgs = Array.from(document.querySelectorAll('#galleryGrid .g-item img'));
-        lbImgs.forEach((img, i) => { img.closest('.g-item').addEventListener('click', () => openLB(i)); });
+      lbImgs = Array.from(document.querySelectorAll('#galleryGrid .g-item img'));
+      lbImgs.forEach((img, i) => {img.closest('.g-item').addEventListener('click', () => openLB(i));});
     }
-    function openLB(i) { lbIdx = i; document.getElementById('lb-img').src = lbImgs[i].src; document.getElementById('lb-caption').textContent = lbImgs[i].alt || ''; document.getElementById('lightbox').classList.add('open'); }
+    function openLB(i) {lbIdx = i; document.getElementById('lb-img').src = lbImgs[i].src; document.getElementById('lb-caption').textContent = lbImgs[i].alt || ''; document.getElementById('lightbox').classList.add('open');}
     document.getElementById('lb-close').onclick = () => document.getElementById('lightbox').classList.remove('open');
-    document.getElementById('lb-prev').onclick = () => { lbIdx = (lbIdx - 1 + lbImgs.length) % lbImgs.length; document.getElementById('lb-img').src = lbImgs[lbIdx].src; document.getElementById('lb-caption').textContent = lbImgs[lbIdx].alt || ''; };
-    document.getElementById('lb-next').onclick = () => { lbIdx = (lbIdx + 1) % lbImgs.length; document.getElementById('lb-img').src = lbImgs[lbIdx].src; document.getElementById('lb-caption').textContent = lbImgs[lbIdx].alt || ''; };
-    document.getElementById('lightbox').onclick = function(e) { if (e.target === this) this.classList.remove('open'); };
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open'); if (e.key === 'ArrowLeft') document.getElementById('lb-prev').click(); if (e.key === 'ArrowRight') document.getElementById('lb-next').click(); });
+    document.getElementById('lb-prev').onclick = () => {lbIdx = (lbIdx - 1 + lbImgs.length) % lbImgs.length; document.getElementById('lb-img').src = lbImgs[lbIdx].src; document.getElementById('lb-caption').textContent = lbImgs[lbIdx].alt || '';};
+    document.getElementById('lb-next').onclick = () => {lbIdx = (lbIdx + 1) % lbImgs.length; document.getElementById('lb-img').src = lbImgs[lbIdx].src; document.getElementById('lb-caption').textContent = lbImgs[lbIdx].alt || '';};
+    document.getElementById('lightbox').onclick = function (e) {if (e.target === this) this.classList.remove('open');};
+    document.addEventListener('keydown', e => {if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open'); if (e.key === 'ArrowLeft') document.getElementById('lb-prev').click(); if (e.key === 'ArrowRight') document.getElementById('lb-next').click();});
 
     /* ═══ WHATSAPP FORM ═══ */
     function sendWA() {
-        const name = document.getElementById('f-name').value.trim();
-        const phone = document.getElementById('f-phone').value.trim();
-        const service = document.getElementById('f-service').value;
-        const timing = document.getElementById('f-timing').value;
-        const msg = document.getElementById('f-msg').value.trim();
-        if (!name || !phone) { alert('Please enter your name and phone number.'); return; }
-        const text = [
-            '🙏 Hello Doctor, I would like to book a physiotherapy consultation.',
-            '',
-            `👤 *Name:* ${name}`,
-            `📞 *Phone:* ${phone}`,
-            service ? `🏥 *Service:* ${service}` : '',
-            timing ? `🕐 *Preferred Timing:* ${timing}` : '',
-            msg ? `📝 *Condition / Query:*\n${msg}` : '',
-        ].filter(Boolean).join('\n');
-        window.open('https://wa.me/919702437345?text=' + encodeURIComponent(text), '_blank');
+      const name = document.getElementById('f-name').value.trim();
+      const phone = document.getElementById('f-phone').value.trim();
+      const service = document.getElementById('f-service').value;
+      const timing = document.getElementById('f-timing').value;
+      const msg = document.getElementById('f-msg').value.trim();
+      if (!name || !phone) {alert('Please enter your name and phone number.'); return;}
+      const text = [
+        '🙏 Hello Doctor, I would like to book a physiotherapy consultation.',
+        '',
+        `👤 *Name:* ${name}`,
+        `📞 *Phone:* ${phone}`,
+        service ? `🏥 *Service:* ${service}` : '',
+        timing ? `🕐 *Preferred Timing:* ${timing}` : '',
+        msg ? `📝 *Condition / Query:*\n${msg}` : '',
+      ].filter(Boolean).join('\n');
+      window.open('https://wa.me/919702437345?text=' + encodeURIComponent(text), '_blank');
     }
 
     /* ═══ NAV / SCROLL / FAQ ═══ */
-    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20), { passive: true });
+    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20), {passive: true});
     document.getElementById('hamburger').addEventListener('click', () => document.getElementById('mobMenu').classList.toggle('open'));
     document.querySelectorAll('#mobMenu a').forEach(a => a.addEventListener('click', () => document.getElementById('mobMenu').classList.remove('open')));
     document.querySelectorAll('.faq-q').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const item = btn.parentElement, isOpen = item.classList.contains('open');
-            document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
-            if (!isOpen) item.classList.add('open');
-        });
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement, isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
     });
-    const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }), { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
+    const obs = new IntersectionObserver(entries => entries.forEach(e => {if (e.isIntersecting) e.target.classList.add('vis');}), {threshold: 0.08, rootMargin: '0px 0px -36px 0px'});
     document.querySelectorAll('.fu').forEach(el => obs.observe(el));
     window.addEventListener('load', buildLB);
   </script>
