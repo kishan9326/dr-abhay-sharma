@@ -2879,15 +2879,16 @@
 
     // ─── CONFIG ───
     // 🔥 REPLACE THIS WITH YOUR ACTUAL GOOGLE SHEET ID
- 
- // ─── CONFIG ───
+   // ─── GOOGLE SHEETS CONFIG ───
+// Your actual Sheet ID (from your edit URL)
 const SHEET_ID = '190LGrEet-A0tactkZWF0ZxrAyj7-RIXLLjD-ZkPpu8E';
-// Use the CSV export URL instead of JSON
-const SHEET_URL = `https://corsproxy.io/?https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+// Use the CSV export endpoint (works reliably)
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
 let videoData = [];
 let isFetching = false;
 
+// ─── FETCH & RENDER ───
 async function fetchVideos() {
     if (isFetching) return;
     isFetching = true;
@@ -2901,14 +2902,19 @@ async function fetchVideos() {
         const lines = csvText.split('\n').filter(line => line.trim());
         if (lines.length < 2) throw new Error('No data rows found');
         
-        // Get headers
+        // Get headers (first row)
         const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
         const catIdx = headers.findIndex(h => h.toLowerCase() === 'category');
         const linkIdx = headers.findIndex(h => h.toLowerCase() === 'link');
         const statusIdx = headers.findIndex(h => h.toLowerCase() === 'status');
         
+        if (catIdx === -1 || linkIdx === -1) {
+            throw new Error('Required columns "Category" or "Link" not found in sheet.');
+        }
+        
+        // Parse rows
         videoData = lines.slice(1).map(line => {
-            // Handle quoted CSV values properly
+            // Simple CSV parser (handles quoted values)
             const cols = [];
             let current = '';
             let inQuotes = false;
@@ -2933,7 +2939,7 @@ async function fetchVideos() {
             };
         }).filter(v => v.category && v.link && v.status === 'Show');
         
-        // Sort: newest first
+        // Sort: newest first (reverse of sheet order)
         videoData.reverse();
         
         // Render categories
@@ -2946,7 +2952,7 @@ async function fetchVideos() {
         
     } catch (error) {
         console.error('Error loading videos:', error);
-        // Show user-friendly message
+        // Show fallback message
         document.querySelectorAll('.video-row').forEach(row => {
             if (!row.hasChildNodes()) {
                 row.innerHTML = `<div style="padding:20px;color:#666;width:100%;text-align:center;background:#f8f8f8;border-radius:12px;">
@@ -2958,44 +2964,52 @@ async function fetchVideos() {
         isFetching = false;
     }
 }
-    // ─── RENDER FUNCTION ───
-    function renderVideoCategory(category, videos) {
-      const container = document.querySelector(`[data-category="${category}"] .video-row`);
-      if (!container) return;
 
-      if (videos.length === 0) {
+// ─── RENDER FUNCTION (keep as is) ───
+function renderVideoCategory(category, videos) {
+    const container = document.querySelector(`[data-category="${category}"] .video-row`);
+    if (!container) return;
+    
+    if (videos.length === 0) {
         container.innerHTML = `<div style="padding:20px;color:#888;width:100%;text-align:center;font-size:0.9rem;background:#f8f8f8;border-radius:12px;">
-                No videos in this category yet
-            </div>`;
+            No videos in this category yet
+        </div>`;
         return;
-      }
-
-      container.innerHTML = videos.map(v => {
-        const isYT = v.platform === 'youtube';
-
-        return `
-                <div class="video-card">
-                    ${isYT ? `
-                        <iframe src="${v.link}" allowfullscreen loading="lazy"></iframe>
-                    ` : `
-                        <blockquote class="instagram-media" 
-                            data-instgrm-permalink="${v.link}" 
-                            data-instgrm-version="14"
-                            style="width:100%;min-width:100%;max-width:420px !important;margin:0 auto !important;">
-                        </blockquote>
-                    `}
-                </div>
-            `;
-      }).join('');
-
-      // Re-initialize Instagram embeds (if any Instagram posts were added)
-      if (window.instgrm && videos.some(v => v.platform === 'instagram')) {
-        setTimeout(() => {
-          window.instgrm.Embeds.process();
-        }, 1000);
-      }
     }
+    
+    container.innerHTML = videos.map(v => {
+        const isYT = v.platform === 'youtube';
+        return `
+            <div class="video-card">
+                ${isYT ? `
+                    <iframe src="${v.link}" allowfullscreen loading="lazy"></iframe>
+                ` : `
+                    <blockquote class="instagram-media" 
+                        data-instgrm-permalink="${v.link}" 
+                        data-instgrm-version="14"
+                        style="width:100%;min-width:100%;max-width:420px !important;margin:0 auto !important;">
+                    </blockquote>
+                `}
+            </div>
+        `;
+    }).join('');
+    
+    // Re-initialize Instagram embeds
+    if (window.instgrm && videos.some(v => v.platform === 'instagram')) {
+        setTimeout(() => {
+            window.instgrm.Embeds.process();
+        }, 1500);
+    }
+}
 
+// ─── AUTO-REFRESH ───
+document.addEventListener('DOMContentLoaded', () => {
+    fetchVideos();
+    setInterval(fetchVideos, 30000);
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) fetchVideos();
+    });
+});
     // ─── AUTO-REFRESH ───
     function autoRefresh() {
       fetchVideos();
