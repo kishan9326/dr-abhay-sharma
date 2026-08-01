@@ -2873,17 +2873,19 @@
   </footer>
 
   <script>
-    /* ═══════════════════════════════════════════════════════════════════
-       ██  GOOGLE SHEETS INTEGRATION - VIDEO CMS
-       ═══════════════════════════════════════════════════════════════════ */
+    
 
-    // ─── CONFIG ───
-    // 🔥 REPLACE THIS WITH YOUR ACTUAL GOOGLE SHEET ID
-   // ─── GOOGLE SHEETS CONFIG ───
-// Your actual Sheet ID (from your edit URL)
+
+
+    /* ═══════════════════════════════════════════════════════════════════
+   ██  GOOGLE SHEETS API V4 - VIDEO CMS
+   ═══════════════════════════════════════════════════════════════════ */
+
+// ─── CONFIG ───
+const API_KEY = 'AIzaSyBlAi_dnMigJzpAzrf1nuJNS-zZ5tl5V-M'; // ← REPLACE WITH YOUR API KEY
 const SHEET_ID = '190LGrEet-A0tactkZWF0ZxrAyj7-RIXLLjD-ZkPpu8E';
-// Use the CSV export endpoint (works reliably)
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+const SHEET_NAME = 'Sheet1'; // ← Change if your sheet tab has a different name
+const SHEET_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
 
 let videoData = [];
 let isFetching = false;
@@ -2894,50 +2896,45 @@ async function fetchVideos() {
     isFetching = true;
     
     try {
+        console.log('📊 Fetching videos from Google Sheets...');
         const response = await fetch(SHEET_URL);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const csvText = await response.text();
         
-        // Parse CSV
-        const lines = csvText.split('\n').filter(line => line.trim());
-        if (lines.length < 2) throw new Error('No data rows found');
-        
-        // Get headers (first row)
-        const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-        const catIdx = headers.findIndex(h => h.toLowerCase() === 'category');
-        const linkIdx = headers.findIndex(h => h.toLowerCase() === 'link');
-        const statusIdx = headers.findIndex(h => h.toLowerCase() === 'status');
-        
-        if (catIdx === -1 || linkIdx === -1) {
-            throw new Error('Required columns "Category" or "Link" not found in sheet.');
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('API Error:', errorData);
+            throw new Error(`API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
         }
         
-        // Parse rows
-        videoData = lines.slice(1).map(line => {
-            // Simple CSV parser (handles quoted values)
-            const cols = [];
-            let current = '';
-            let inQuotes = false;
-            for (const char of line) {
-                if (char === '"') {
-                    inQuotes = !inQuotes;
-                } else if (char === ',' && !inQuotes) {
-                    cols.push(current.trim());
-                    current = '';
-                } else {
-                    current += char;
-                }
-            }
-            cols.push(current.trim());
-            
-            const link = linkIdx >= 0 ? cols[linkIdx] || '' : '';
+        const data = await response.json();
+        const rows = data.values || [];
+        
+        if (rows.length < 2) {
+            throw new Error('No data found. Make sure you have headers and at least one row.');
+        }
+        
+        // Get headers (first row)
+        const headers = rows[0].map(h => h.trim().toLowerCase());
+        const catIdx = headers.indexOf('category');
+        const linkIdx = headers.indexOf('link');
+        const statusIdx = headers.indexOf('status');
+        
+        if (catIdx === -1 || linkIdx === -1) {
+            console.warn('Headers found:', headers);
+            throw new Error('Required columns "Category" or "Link" not found.');
+        }
+        
+        // Parse rows (skip header row)
+        videoData = rows.slice(1).map(row => {
+            const link = linkIdx >= 0 ? row[linkIdx]?.trim() || '' : '';
             return {
-                category: catIdx >= 0 ? cols[catIdx] || '' : '',
+                category: catIdx >= 0 ? row[catIdx]?.trim() || '' : '',
                 link: link,
-                status: statusIdx >= 0 ? cols[statusIdx] || '' : 'Hide',
-                platform: link.includes('youtube.com') ? 'youtube' : 'instagram'
+                status: statusIdx >= 0 ? row[statusIdx]?.trim() || '' : 'Hide',
+                platform: link.includes('youtube.com') || link.includes('youtu.be') ? 'youtube' : 'instagram'
             };
         }).filter(v => v.category && v.link && v.status === 'Show');
+        
+        console.log(`✅ Loaded ${videoData.length} videos`);
         
         // Sort: newest first (reverse of sheet order)
         videoData.reverse();
@@ -2951,12 +2948,11 @@ async function fetchVideos() {
         renderVideoCategory('youtube', videoData.filter(v => v.category === 'youtube'));
         
     } catch (error) {
-        console.error('Error loading videos:', error);
-        // Show fallback message
+        console.error('❌ Error loading videos:', error);
         document.querySelectorAll('.video-row').forEach(row => {
             if (!row.hasChildNodes()) {
                 row.innerHTML = `<div style="padding:20px;color:#666;width:100%;text-align:center;background:#f8f8f8;border-radius:12px;">
-                    ⚠️ Unable to load videos. Please refresh the page or try again later.
+                    ⚠️ Unable to load videos. ${error.message}
                 </div>`;
             }
         });
@@ -2965,7 +2961,7 @@ async function fetchVideos() {
     }
 }
 
-// ─── RENDER FUNCTION (keep as is) ───
+// ─── RENDER FUNCTION ───
 function renderVideoCategory(category, videos) {
     const container = document.querySelector(`[data-category="${category}"] .video-row`);
     if (!container) return;
@@ -3010,73 +3006,55 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!document.hidden) fetchVideos();
     });
 });
-    // ─── AUTO-REFRESH ───
-    function autoRefresh() {
-      fetchVideos();
-    }
 
-    // ─── INIT ───
-    document.addEventListener('DOMContentLoaded', () => {
-      // Initial load
-      fetchVideos();
+/* ═══════════════════════════════════════════════════════════════════
+   ██  REAL GOOGLE REVIEWS
+   ═══════════════════════════════════════════════════════════════════ */
+const REVIEWS = [
+    // Add your Google reviews here
+];
 
-      // Auto-refresh every 30 seconds
-      setInterval(autoRefresh, 10000);
-
-      // Also refresh when tab becomes visible again
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) fetchVideos();
-      });
-    });
-
-    /* ═══════════════════════════════════════════════════════════════════
-       ██  REAL GOOGLE REVIEWS
-       ═══════════════════════════════════════════════════════════════════ */
-    const REVIEWS = [
-      // Add your Google reviews here
-    ];
-
-    /* Avatar colors */
-    const AV_COLORS = ["#0F766E", "#2563EB", "#7c3aed", "#db2777", "#d97706", "#059669", "#dc2626", "#0891b2", "#65a30d"];
-    (function renderReviews() {
-      const g = document.getElementById('reviewsGrid');
-      if (!g) return;
-      g.innerHTML = REVIEWS.map((r, i) => `
-        <div class="rev-card${r.featured ? ' featured' : ''}">
-            <div class="rev-stars">${'⭐'.repeat(r.rating)}</div>
-            <p class="rev-text">"${r.text}"</p>
-            <div class="rev-author">
-                <div class="rev-av" style="background:${AV_COLORS[i % AV_COLORS.length]}">${r.initials}</div>
-                <div>
-                    <div class="rev-name">${r.name}${r.badge ? `<span class="rev-local-badge">✦ ${r.badge}</span>` : ''}</div>
-                    <div class="rev-meta">${r.type} · ${r.date}</div>
-                </div>
+/* Avatar colors */
+const AV_COLORS = ["#0F766E", "#2563EB", "#7c3aed", "#db2777", "#d97706", "#059669", "#dc2626", "#0891b2", "#65a30d"];
+(function renderReviews() {
+    const g = document.getElementById('reviewsGrid');
+    if (!g) return;
+    g.innerHTML = REVIEWS.map((r, i) => `
+    <div class="rev-card${r.featured ? ' featured' : ''}">
+        <div class="rev-stars">${'⭐'.repeat(r.rating)}</div>
+        <p class="rev-text">"${r.text}"</p>
+        <div class="rev-author">
+            <div class="rev-av" style="background:${AV_COLORS[i % AV_COLORS.length]}">${r.initials}</div>
+            <div>
+                <div class="rev-name">${r.name}${r.badge ? `<span class="rev-local-badge">✦ ${r.badge}</span>` : ''}</div>
+                <div class="rev-meta">${r.type} · ${r.date}</div>
             </div>
-        </div>`).join('');
-    })();
+        </div>
+    </div>`).join('');
+})();
 
-    /* ═══ LIGHTBOX ═══ */
-    let lbImgs = [], lbIdx = 0;
-    function buildLB() {
-      lbImgs = Array.from(document.querySelectorAll('#galleryGrid .g-item img'));
-      lbImgs.forEach((img, i) => {img.closest('.g-item').addEventListener('click', () => openLB(i));});
-    }
-    function openLB(i) {lbIdx = i; document.getElementById('lb-img').src = lbImgs[i].src; document.getElementById('lb-caption').textContent = lbImgs[i].alt || ''; document.getElementById('lightbox').classList.add('open');}
-    document.getElementById('lb-close').onclick = () => document.getElementById('lightbox').classList.remove('open');
-    document.getElementById('lb-prev').onclick = () => {lbIdx = (lbIdx - 1 + lbImgs.length) % lbImgs.length; document.getElementById('lb-img').src = lbImgs[lbIdx].src; document.getElementById('lb-caption').textContent = lbImgs[lbIdx].alt || '';};
-    document.getElementById('lb-next').onclick = () => {lbIdx = (lbIdx + 1) % lbImgs.length; document.getElementById('lb-img').src = lbImgs[lbIdx].src; document.getElementById('lb-caption').textContent = lbImgs[lbIdx].alt || '';};
-    document.getElementById('lightbox').onclick = function (e) {if (e.target === this) this.classList.remove('open');};
-    document.addEventListener('keydown', e => {if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open'); if (e.key === 'ArrowLeft') document.getElementById('lb-prev').click(); if (e.key === 'ArrowRight') document.getElementById('lb-next').click();});
+/* ═══ LIGHTBOX ═══ */
+let lbImgs = [], lbIdx = 0;
+function buildLB() {
+    lbImgs = Array.from(document.querySelectorAll('#galleryGrid .g-item img'));
+    lbImgs.forEach((img, i) => { img.closest('.g-item').addEventListener('click', () => openLB(i)); });
+}
+function openLB(i) { lbIdx = i; document.getElementById('lb-img').src = lbImgs[i].src; document.getElementById('lb-caption').textContent = lbImgs[i].alt || ''; document.getElementById('lightbox').classList.add('open'); }
+document.getElementById('lb-close').onclick = () => document.getElementById('lightbox').classList.remove('open');
+document.getElementById('lb-prev').onclick = () => { lbIdx = (lbIdx - 1 + lbImgs.length) % lbImgs.length; document.getElementById('lb-img').src = lbImgs[lbIdx].src; document.getElementById('lb-caption').textContent = lbImgs[lbIdx].alt || ''; };
+document.getElementById('lb-next').onclick = () => { lbIdx = (lbIdx + 1) % lbImgs.length; document.getElementById('lb-img').src = lbImgs[lbIdx].src; document.getElementById('lb-caption').textContent = lbImgs[lbIdx].alt || ''; };
+document.getElementById('lightbox').onclick = function(e) { if (e.target === this) this.classList.remove('open'); };
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open'); if (e.key === 'ArrowLeft') document.getElementById('lb-prev').click(); if (e.key === 'ArrowRight') document.getElementById('lb-next').click(); });
 
-    /* ═══ WHATSAPP FORM ═══ */
-    function sendWA() {
-      const name = document.getElementById('f-name').value.trim();
-      const phone = document.getElementById('f-phone').value.trim();
-      const service = document.getElementById('f-service').value;
-      const timing = document.getElementById('f-timing').value;
-      const msg = document.getElementById('f-msg').value.trim();
-      if (!name || !phone) {alert('Please enter your name and phone number.'); return;}
-      const text = [
+/* ═══ WHATSAPP FORM ═══ */
+function sendWA() {
+    const name = document.getElementById('f-name').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const service = document.getElementById('f-service').value;
+    const timing = document.getElementById('f-timing').value;
+    const msg = document.getElementById('f-msg').value.trim();
+    if (!name || !phone) { alert('Please enter your name and phone number.'); return; }
+    const text = [
         '🙏 Hello Doctor, I would like to book a physiotherapy consultation.',
         '',
         `👤 *Name:* ${name}`,
@@ -3084,24 +3062,24 @@ document.addEventListener('DOMContentLoaded', () => {
         service ? `🏥 *Service:* ${service}` : '',
         timing ? `🕐 *Preferred Timing:* ${timing}` : '',
         msg ? `📝 *Condition / Query:*\n${msg}` : '',
-      ].filter(Boolean).join('\n');
-      window.open('https://wa.me/919702437345?text=' + encodeURIComponent(text), '_blank');
-    }
+    ].filter(Boolean).join('\n');
+    window.open('https://wa.me/919702437345?text=' + encodeURIComponent(text), '_blank');
+}
 
-    /* ═══ NAV / SCROLL / FAQ ═══ */
-    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20), {passive: true});
-    document.getElementById('hamburger').addEventListener('click', () => document.getElementById('mobMenu').classList.toggle('open'));
-    document.querySelectorAll('#mobMenu a').forEach(a => a.addEventListener('click', () => document.getElementById('mobMenu').classList.remove('open')));
-    document.querySelectorAll('.faq-q').forEach(btn => {
-      btn.addEventListener('click', () => {
+/* ═══ NAV / SCROLL / FAQ ═══ */
+window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20), { passive: true });
+document.getElementById('hamburger').addEventListener('click', () => document.getElementById('mobMenu').classList.toggle('open'));
+document.querySelectorAll('#mobMenu a').forEach(a => a.addEventListener('click', () => document.getElementById('mobMenu').classList.remove('open')));
+document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
         const item = btn.parentElement, isOpen = item.classList.contains('open');
         document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
         if (!isOpen) item.classList.add('open');
-      });
     });
-    const obs = new IntersectionObserver(entries => entries.forEach(e => {if (e.isIntersecting) e.target.classList.add('vis');}), {threshold: 0.08, rootMargin: '0px 0px -36px 0px'});
-    document.querySelectorAll('.fu').forEach(el => obs.observe(el));
-    window.addEventListener('load', buildLB);
+});
+const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }), { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
+document.querySelectorAll('.fu').forEach(el => obs.observe(el));
+window.addEventListener('load', buildLB);
   </script>
 </body>
 
